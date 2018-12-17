@@ -409,6 +409,11 @@ func buildStatefulSet(statefulSetName, clusterName, deploymentType, baseImage, s
 		scheme = v1.URISchemeHTTP
 	}
 
+	// add a nodeselector for failure-domain.beta.kubernetes.io/zone:  based on the AZ. Use storageClass var as that contains the current AZ
+	if storageClass != "default" {
+		nodeSelector["failure-domain.beta.kubernetes.io/zone"] = storageClass
+	}
+
 	// Parse CPU / Memory
 	// limitCPU, _ := resource.ParseQuantity(resources.Limits.CPU)
 	// limitMemory, _ := resource.ParseQuantity(resources.Limits.Memory)
